@@ -11,10 +11,11 @@ class Task():
         self.args = args
         
 class TaskManager():
-    def __init__(self):
+    def __init__(self, robot, config):
         self.__tasks = []
         self.__curentTask = None
-        
+        self.robot = robot
+        self.config = config
         #self.sortmanager = SortManager()
 
     def getTasks(self):
@@ -50,7 +51,7 @@ class TaskManager():
                     
                 print(self.__curentTask.id, "doing")
                 
-                self.__curentTask.CallBack(*args)
+                self.__curentTask.CallBack(self.robot, *args)
                     
                 print(self.__curentTask.id, "done")
             
