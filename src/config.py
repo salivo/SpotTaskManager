@@ -12,8 +12,8 @@ class Config:
         self.password = parser.get("config", "password")
         self.timeout = int(parser.get("config", "timeout"))
         # autowalk
-        self.path_following_mode = int(parser.get("autowalk", "path_following_mode"))
-        self.walk_directory = parser.get("autowalk", "walk_directory")
-        self.upload_timeout = float(parser.get("autowalk", "upload_timeout"))
-        self.mission_timeout = float(parser.get("autowalk", "mission_timeout"))
-        self.disable_directed_exploration = parser.get("autowalk", "disable_directed_exploration").lower() in truestr
+        self.path_following_mode = int(parser.get("graph_nav", "path_following_mode"))
+        self.graph_directory = parser.get("graph_nav", "graph_directory")
+        self.upload_timeout = float(parser.get("graph_nav", "upload_timeout"))
+        self.graph_timeout = float(parser.get("graph_nav", "graph_timeout"))
+        self.disable_directed_exploration = parser.get("graph_nav", "disable_directed_exploration").lower() in truestr

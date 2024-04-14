@@ -9,7 +9,7 @@ import bosdyn.client.lease
 if __name__ == '__main__':
     config = Config()
     robot = Robot(config)
-    taskmanager = TaskManager()
+    taskmanager = TaskManager(robot, config)
     with bosdyn.client.lease.LeaseKeepAlive(robot.lease_client, must_acquire=True, return_at_exit=True):
         robot.stand()
         sleep(2)
