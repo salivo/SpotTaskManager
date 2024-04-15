@@ -11,4 +11,5 @@ Task manager for "Inovujeme Pilsen"
 
 [graph_nav]      
     graphnavs_dir = GraphNavs
-    graphnav_name = dilna.walk```
+    graphnav_name = dilna.walk
+```
