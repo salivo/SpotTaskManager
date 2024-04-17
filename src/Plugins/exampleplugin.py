@@ -18,4 +18,4 @@ class ExamplePlugin(Plugins.Base):
         
     def __init__(self, taskmanger):
         print("im example plugin!")
-        taskmanger.addTask(1,(3,0),self.callbacker)
+        taskmanger.createNewTask(1,(3,0),self.callbacker)

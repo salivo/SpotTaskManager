@@ -1,21 +1,41 @@
+
 #from sortmanager import SortManager
 import inspect
 import uuid
+from collections import namedtuple
 
-class MoveTo():
-    def __init__(self, x, y, z=0.0):
-        self.x = x
-        self.y = y
-        self.z = z
 
 class Task():
-    def __init__(self, id, moveto, classname, beforeCallBack, CallBack, args):
+    def __init__(self, id, pos, classname, beforeCallBack, CallBack, args):
         self.id = id
         self.className = classname
         self.beforeCallBack = beforeCallBack
         self.CallBack = CallBack
         self.args = args
-        self.moveto = moveto
+        self.moveto = self.__createNamedTuple(pos)
+        
+    def __createNamedTuple(self, tuple):
+        Position = namedtuple('Position', ['x', 'y', 'z'])
+        if len(tuple) > 2:
+            z = float(tuple[2])
+        else:
+            z = 0.0
+        return Position(x=float(tuple[0]), y=float(tuple[1]), z=z)
+
+    def run(self, robot):
+        if self.beforeCallBack is not None: 
+            self.beforeCallBack(*self.args)
+            
+        # print(self.__curentTask.id, "doing")
+        # print(self.__curentTask.moveto.x, self.__curentTask.moveto.y, self.__curentTask.moveto.z) 
+        #TODO: add loging system as i like :)                
+
+        robot._navigate_to_anchor(self.moveto.x, self.moveto.y, self.moveto.z)
+        
+        self.CallBack(robot, *self.args)
+            
+        # print(self.__curentTask.id, "done")
+
         
 class TaskManager():
     def __init__(self, robot, config):
@@ -23,57 +43,33 @@ class TaskManager():
         self.__curentTask = None
         self.robot = robot
         self.config = config
-        #self.sortmanager = SortManager()
+        #self.sortmanager = SortManager()  TODO: @LosVocelos, I guess, it won't be difficult.
 
     def getTasks(self):
         return self.__tasks
          
-    def addTask(self, priority, pos, CallBack, beforeCallBack=None, *args):
-    
-        moveto = MoveTo(pos[0],pos[1])
-        if len(pos) > 2:
-            moveto.z = pos[2]
-            
-        id = uuid.uuid4()
-        classname = inspect.stack()[1][0].f_locals['self'].__class__.__name__
-        task = Task(id, moveto, classname, beforeCallBack, CallBack, args)
-        # bebag print(vars(task))
-        
-        #position = self.sortmanage.getPosition(getTasks(),task)
+    def createNewTask(self, priority, pos, CallBack, beforeCallBack=None, *args):
+        classname = inspect.stack()[1][0].f_locals['self'].__class__.__name__ # get classname from executor class
+        task = Task(uuid.uuid4(), pos, classname, beforeCallBack, CallBack, args)
         self.__tasks.insert(0, task)
-        return id
-    def delTask(force = False):
+        return task
+ 
+    def delTask(task):
         pass
 
     def getCurentTask(self):
         return self.__curentTask
+        
     def TaskLoop(self):
         while 1:
             while len(self.__tasks) > 0:
-
                 self.__curentTask = self.__tasks.pop(0)
-
-                if self.__curentTask.args is not None:
-                    args = self.__curentTask.args
-                else:
-                    args = None
-                
-                if self.__curentTask.beforeCallBack is not None: 
-                    self.__curentTask.beforeCallBack(*args)
-                    
-                print(self.__curentTask.id, "doing")
-                print(self.__curentTask.moveto.x, self.__curentTask.moveto.y, self.__curentTask.moveto.z)
-                self.robot._navigate_to_anchor(
-                                                self.__curentTask.moveto.x, 
-                                                self.__curentTask.moveto.y,
-                                                self.__curentTask.moveto.z
-                                                )
-                
-                self.__curentTask.CallBack(self.robot, *args)
-                    
-                print(self.__curentTask.id, "done")
-
+                self.__curentTask.run(self.robot)
+            if self.robot.powerState:
+                    self.robot.powerControl(False)
             if self.robot.powerState:
                 self.robot.powerControl(False)
+                
+                
             
              

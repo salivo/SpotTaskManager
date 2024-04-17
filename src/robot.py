@@ -74,9 +74,6 @@ class Robot():
             graphnav_readed_data = graph_file.read()
             self._current_graph = map_pb2.Graph()
             self._current_graph.ParseFromString(graphnav_readed_data)
-            print(
-                f'Loaded graph has {len(self._current_graph.waypoints)} waypoints and {self._current_graph.edges} edges'
-            )
 
         for waypoint in self._current_graph.waypoints:
             with open(f'{graphnav_dirpath}/waypoint_snapshots/{waypoint.snapshot_id}', 'rb') as snapshot_file:
