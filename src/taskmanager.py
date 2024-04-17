@@ -6,13 +6,13 @@ from collections import namedtuple
 
 
 class Task():
-    def __init__(self, id, pos, classname, beforeCallBack, CallBack, args):
+    def __init__(self, id, moveto, classname, beforeCallBack, CallBack, args):
         self.id = id
         self.className = classname
         self.beforeCallBack = beforeCallBack
         self.CallBack = CallBack
         self.args = args
-        self.moveto = self.__createNamedTuple(pos)
+        self.moveto = self.__createNamedTuple(moveto)
         
     def __createNamedTuple(self, tuple):
         Position = namedtuple('Position', ['x', 'y', 'z'])
@@ -48,12 +48,12 @@ class TaskManager():
     def getTasks(self):
         return self.__tasks
          
-    def createNewTask(self, priority, pos, CallBack, beforeCallBack=None, *args):
+    def createNewTask(self, priority, moveto, CallBack, beforeCallBack=None, *args):
         classname = inspect.stack()[1][0].f_locals['self'].__class__.__name__ # get classname from executor class
-        task = Task(uuid.uuid4(), pos, classname, beforeCallBack, CallBack, args)
-        self.__tasks.insert(0, task)
+        task = Task(uuid.uuid4(), moveto, classname, beforeCallBack, CallBack, args)
+        self.__tasks.append(task) #insert with sortmanager pos 
         return task
- 
+        
     def delTask(task):
         pass
 
@@ -67,8 +67,6 @@ class TaskManager():
                 self.__curentTask.run(self.robot)
             if self.robot.powerState:
                     self.robot.powerControl(False)
-            if self.robot.powerState:
-                self.robot.powerControl(False)
                 
                 
             
