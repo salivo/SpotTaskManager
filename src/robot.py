@@ -38,7 +38,6 @@ class Robot():
         self._current_edges = dict()
         self._current_waypoint_snapshots = dict()
         self._current_edge_snapshots = dict()
-        self._current_annotation_name_to_wp_id = dict()
         # load snapshots
         self.__upload_graph_and_snapshots()
         self.localizeByFiducial()  
@@ -47,6 +46,7 @@ class Robot():
         if not self.powerState:
             self.controlPower(True)
         blocking_stand(self.command_client, timeout_sec=10)
+        
     def sit(self):
         blocking_sit(self.command_client, timeout_sec=10)
         
