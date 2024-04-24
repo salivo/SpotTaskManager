@@ -21,7 +21,7 @@ class Task():
         # print(self.__curentTask.id, "doing")
         # print(self.__curentTask.moveto.x, self.__curentTask.moveto.y, self.__curentTask.moveto.z) 
         #TODO: add loging system as i like :)                
-        robot._navigate_to_anchor(self.point.x, self.point.y, self.point.z)
+        robot._navigate_to_anchor(self.point)
         self.CallBack(robot, *self.args)
         # print(self.__curentTask.id, "done")
             

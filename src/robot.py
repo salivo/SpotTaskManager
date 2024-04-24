@@ -114,8 +114,8 @@ class Robot():
         self.graph_nav_client.set_localization(initial_guess_localization=localization,
                                                 ko_tform_body=current_odom_tform_body)
                                                     
-    def _navigate_to_anchor(self, x, y, z=0):        
-        seed_T_goal = SE3Pose(float(x), float(y), float(z), Quat())
+    def _navigate_to_anchor(self, vec):        
+        seed_T_goal = SE3Pose(vec.x, vec.y, vec.z, Quat())
         self.stand()
         nav_to_cmd_id = None
         is_finished = False
