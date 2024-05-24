@@ -11,9 +11,7 @@ class ExamplePlugin(Plugins.Base):
 
     def __init__(self, taskmanger):
         print("i'm example plugin!")
-        MoveSpotToPoint = taskmanger.Point(4,1)
-        taskmanger.createNewTask(MoveSpotToPoint,PRIORITY,self.callbacker)
-        MoveSpotToPoint = taskmanger.Point(3,0)
+        MoveSpotToPoint = taskmanger.Point(3,-1)
         taskmanger.createNewTask(MoveSpotToPoint,PRIORITY,self.callbacker)
             
     def callbacker(self, robot):

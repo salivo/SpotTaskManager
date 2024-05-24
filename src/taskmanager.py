@@ -21,7 +21,7 @@ class Task():
         # print(self.__curentTask.id, "doing")
         # print(self.__curentTask.moveto.x, self.__curentTask.moveto.y, self.__curentTask.moveto.z) 
         #TODO: add loging system as i like :)                
-        robot._navigate_to_anchor(self.point)
+        robot.navigate_to_anchor(self.point)
         self.CallBack(robot, *self.args)
         # print(self.__curentTask.id, "done")
             
@@ -51,7 +51,10 @@ class TaskManager():
             return
 
     def createNewTask(self, point, priority, CallBack, beforeCallBack=None, *args):
-        classname = inspect.stack()[1][0].f_locals['self'].__class__.__name__ # get classname from executor class
+        try:
+            classname = inspect.stack()[1][0].f_locals['self'].__class__.__name__ # get classname from executor class
+        except Exception:
+            classname = "idk"
         task = Task(uuid.uuid4(), point, classname, beforeCallBack, CallBack, args)
         self.__tasks.append(task) #TODO: insert(pos) with sortmanager.getpos() 
         return task

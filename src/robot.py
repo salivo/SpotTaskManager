@@ -40,7 +40,6 @@ class Robot():
         self._current_edge_snapshots = dict()
         # load snapshots
         self.__upload_graph_and_snapshots()
-        self.localizeByFiducial()  
               
     def stand(self):
         if not self.powerState:
@@ -107,6 +106,8 @@ class Robot():
         self.__load_edges(upload_graph_interface)
 
     def localizeByFiducial(self, *args):
+        self.stand()
+        sleep(3)
         robot_state = self.state_client.get_robot_state()
         current_odom_tform_body = get_odom_tform_body(
             robot_state.kinematic_state.transforms_snapshot).to_proto()
@@ -114,7 +115,7 @@ class Robot():
         self.graph_nav_client.set_localization(initial_guess_localization=localization,
                                                 ko_tform_body=current_odom_tform_body)
                                                     
-    def _navigate_to_anchor(self, vec):        
+    def navigate_to_anchor(self, vec):        
         seed_T_goal = SE3Pose(vec.x, vec.y, vec.z, Quat())
         self.stand()
         nav_to_cmd_id = None
